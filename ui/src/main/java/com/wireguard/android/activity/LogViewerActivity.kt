@@ -105,8 +105,8 @@ class LogViewerActivity: AppCompatActivity() {
             return@withContext
         }
         val stdout = BufferedReader(InputStreamReader(process!!.inputStream, StandardCharsets.UTF_8))
-        var line: String
-        while(stdout.readLine().also { line = it } != null) {
+        while(true) {
+            val line = stdout.readLine() ?: break
             val logLine = parseLine(line)
             if (logLine != null) {
                 rawLogLines.add(line)

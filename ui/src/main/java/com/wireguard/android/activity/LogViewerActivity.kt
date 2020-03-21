@@ -5,7 +5,6 @@
 
 package com.wireguard.android.activity
 
-import android.content.Context
 import android.content.Intent
 import android.graphics.Typeface.BOLD
 import android.os.Bundle
@@ -53,6 +52,10 @@ class LogViewerActivity: AppCompatActivity() {
         yearFormatter.format(Date())
     }
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
+    private val defaultColor by lazy { resolveAttribute(android.R.attr.textColorPrimary) }
+    @Suppress("Deprecation") private val errorColor by lazy { resources.getColor(R.color.error_tag_color) }
+    @Suppress("Deprecation") private val infoColor by lazy { resources.getColor(R.color.info_tag_color) }
+    @Suppress("Deprecation") private val warningColor by lazy { resources.getColor(R.color.warning_tag_color) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -146,13 +149,12 @@ class LogViewerActivity: AppCompatActivity() {
 
         private inner class ViewHolder(val layout: View, var isSingleLine: Boolean = true) : RecyclerView.ViewHolder(layout)
 
-        @Suppress("Deprecation")
-        private fun levelToColor(context: Context, level: String): Int {
+        private fun levelToColor(level: String): Int {
             return when (level) {
-                "E" -> context.resources.getColor(R.color.error_tag_color)
-                "W" -> context.resources.getColor(R.color.warning_tag_color)
-                "I" -> context.resources.getColor(R.color.info_tag_color)
-                else -> context.resolveAttribute(android.R.attr.textColorPrimary)
+                "E" -> errorColor
+                "W" -> warningColor
+                "I" -> infoColor
+                else -> defaultColor
             }
         }
 
@@ -171,7 +173,7 @@ class LogViewerActivity: AppCompatActivity() {
             else
                 SpannableString("${line.tag}: ${line.msg}").apply {
                     setSpan(StyleSpan(BOLD), 0, "${line.tag}:".length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                    setSpan(ForegroundColorSpan(levelToColor(holder.layout.context, line.level)),
+                    setSpan(ForegroundColorSpan(levelToColor(line.level)),
                             0, "${line.tag}:".length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 }
             holder.layout.apply {

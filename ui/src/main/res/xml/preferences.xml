@@ -30,4 +30,8 @@
         android:summaryOff="@string/allow_remote_control_intents_summary_off"
         android:summaryOn="@string/allow_remote_control_intents_summary_on"
         android:title="@string/allow_remote_control_intents_title" />
+    <Preference
+        android:key="log_viewer"
+        android:title="@string/log_viewer_title"
+        android:summary="@string/log_viewer_pref_summary" />
 </androidx.preference.PreferenceScreen>

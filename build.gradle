@@ -12,6 +12,7 @@ buildscript {
         cardviewVersion = '1.0.0'
         collectionVersion = '1.1.0'
         coreKtxVersion = '1.2.0'
+        coroutinesVersion = '1.3.5'
         constraintLayoutVersion = '1.1.3'
         coordinatorLayoutVersion = '1.1.0'
         agpVersion = '3.6.1'

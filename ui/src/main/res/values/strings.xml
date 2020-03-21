@@ -186,4 +186,6 @@
     <string name="zip_export_title">Export tunnels to zip file</string>
     <string name="key_length_error">Incorrect key length</string>
     <string name="key_contents_error">Bad characters in key</string>
+    <string name="log_viewer_title">Log viewer</string>
+    <string name="log_viewer_pref_summary">TBD</string>
 </resources>

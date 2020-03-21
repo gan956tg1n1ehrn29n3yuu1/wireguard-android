@@ -56,6 +56,13 @@
             android:screenOrientation="fullSensor"
             tools:replace="screenOrientation" />
 
+        <activity android:name=".activity.LogViewerActivity"
+            android:label="@string/log_viewer_title">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+            </intent-filter>
+        </activity>
+
         <receiver android:name=".BootShutdownReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.ACTION_SHUTDOWN" />

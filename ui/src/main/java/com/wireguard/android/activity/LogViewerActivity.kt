@@ -53,6 +53,7 @@ class LogViewerActivity: AppCompatActivity() {
     }
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private val defaultColor by lazy { resolveAttribute(android.R.attr.textColorPrimary) }
+    private var recyclerView: RecyclerView? = null
     @Suppress("Deprecation") private val errorColor by lazy { resources.getColor(R.color.error_tag_color) }
     @Suppress("Deprecation") private val infoColor by lazy { resources.getColor(R.color.info_tag_color) }
     @Suppress("Deprecation") private val warningColor by lazy { resources.getColor(R.color.warning_tag_color) }
@@ -60,10 +61,11 @@ class LogViewerActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = LogViewerActivityBinding.inflate(layoutInflater)
+        recyclerView = binding.recyclerView
         setContentView(binding.root)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         logAdapter = LogEntryAdapter()
-        binding.recyclerView.apply {
+        recyclerView!!.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = logAdapter
             addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
@@ -109,9 +111,16 @@ class LogViewerActivity: AppCompatActivity() {
             val line = stdout.readLine() ?: break
             val logLine = parseLine(line)
             if (logLine != null) {
-                rawLogLines.add(line)
-                logLines.add(logLine)
-                withContext(Dispatchers.Main) { logAdapter.notifyDataSetChanged() }
+                withContext(Dispatchers.Main) {
+                    recyclerView?.let {
+                        val shouldScroll = it.canScrollVertically(1)
+                        rawLogLines.add(line)
+                        logLines.add(logLine)
+                        logAdapter.notifyDataSetChanged()
+                        if (!shouldScroll)
+                            it.scrollToPosition(logLines.size - 1)
+                    }
+                }
             }
         }
     }

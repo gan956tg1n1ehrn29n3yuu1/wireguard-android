@@ -47,13 +47,13 @@ class LogViewerActivity: AppCompatActivity() {
     private lateinit var logAdapter: LogEntryAdapter
     private var logLines = arrayListOf<LogLine>()
     private var rawLogLines = arrayListOf<String>()
+    private var recyclerView: RecyclerView? = null
+    private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private val year by lazy {
         val yearFormatter: DateFormat = SimpleDateFormat("yyyy", Locale.US)
         yearFormatter.format(Date())
     }
-    private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private val defaultColor by lazy { resolveAttribute(android.R.attr.textColorPrimary) }
-    private var recyclerView: RecyclerView? = null
     @Suppress("Deprecation") private val errorColor by lazy { resources.getColor(R.color.error_tag_color) }
     @Suppress("Deprecation") private val infoColor by lazy { resources.getColor(R.color.info_tag_color) }
     @Suppress("Deprecation") private val warningColor by lazy { resources.getColor(R.color.warning_tag_color) }
@@ -61,11 +61,11 @@ class LogViewerActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = LogViewerActivityBinding.inflate(layoutInflater)
-        recyclerView = binding.recyclerView
         setContentView(binding.root)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         logAdapter = LogEntryAdapter()
-        recyclerView!!.apply {
+        binding.recyclerView.apply {
+            recyclerView = this
             layoutManager = LinearLayoutManager(context)
             adapter = logAdapter
             addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
